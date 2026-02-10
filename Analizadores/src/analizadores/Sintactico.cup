@@ -1,0 +1,36 @@
+package analizadores;
+import java_cup.runtime.*;
+
+/*
+    Terminales
+*/
+terminal String PTCOMA,PARIZQ,PARDER,CORIZQ,CORDER;
+terminal String MAS,MENOS,POR,DIVIDIDO;
+terminal String ENTERO;
+terminal String DECIMAL;
+terminal String UMENOS;
+terminal String REVALUAR;
+
+/*
+    No terminales
+*/
+
+non terminal ini;
+non terminal instrucciones;
+non terminal instruccion;
+non terminal Double expresion;
+
+start with ini; 
+
+ini ::= instrucciones;
+
+instrucciones ::= 
+   instruccion instrucciones
+ | instruccion
+;
+
+instruccion ::= 
+   REVALUAR CORIZQ expresion:a CORDER PTCOMA {:System.out.println("El valor de la expresión es: "+a);:}
+;
+
+

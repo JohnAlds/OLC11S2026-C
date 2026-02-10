@@ -1,0 +1,1 @@
+java -jar jflex-1.9.1.jar Lexico.jflex
