@@ -1,20 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package analizadores;
 
-/**
- *
- * @author JohnAlds
- */
+import java.io.StringReader;
+
 public class Analizadores {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        try {
+            String entrada = "Evaluar[5+3];";
+
+            Lexico lexico = new Lexico(new StringReader(entrada));
+            Sintactico parser = new Sintactico(lexico);
+
+            parser.parse();  // 👈 Aquí se ejecuta todo
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    
 }

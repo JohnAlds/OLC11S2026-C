@@ -1,109 +1,118 @@
 package analizadores;
-import java_cup.runtime.*;
+
+import java_cup.runtime.Symbol;
 import java.util.LinkedList;
+
 %%
 
-//Directrices
+// ================= DIRECTRICES =================
 %class Lexico
 %public
 %line
-%char
+%column
 %cup
 %unicode
 %ignorecase
 
 %{
+
     LinkedList<String> listaErrores = new LinkedList<>();
+
+    private void imprimir(String token){
+        System.out.println(
+            "Token: " + token +
+            " | Lexema: '" + yytext() + "'" +
+            " | Linea: " + (yyline + 1) +
+            " | Columna: " + (yycolumn + 1)
+        );
+    }
 
 %}
 
 %init{
-    yyline = 1;
-    yychar = 1;
+    yyline = 0;
+    yycolumn = 0;
 %init}
 
 // ================= EXPRESIONES REGULARES =================
 D       = [0-9]+
 DD      = [0-9]+("."[0-9]+)?
-ID
 
 %%
 
 // ================= PALABRAS RESERVADAS =================
 "Evaluar" {
-    System.out.println("Palabra reservada reconocida: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.REVALUAR, yyline, (int) yychar, yytext());
+    imprimir("REVALUAR");
+    return new Symbol(sym.REVALUAR, yyline+1, yycolumn+1, yytext());
 }
 
 // ================= SÍMBOLOS =================
 ";" {
-    System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PTCOMA, yyline, (int) yychar, yytext());
+    imprimir("PTCOMA");
+    return new Symbol(sym.PTCOMA, yyline+1, yycolumn+1, yytext());
 }
 
 "(" {
-    System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PARIZQ, yyline, (int) yychar, yytext());
+    imprimir("PARIZQ");
+    return new Symbol(sym.PARIZQ, yyline+1, yycolumn+1, yytext());
 }
 
 ")" {
-    System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PARDER, yyline, (int) yychar, yytext());
+    imprimir("PARDER");
+    return new Symbol(sym.PARDER, yyline+1, yycolumn+1, yytext());
 }
 
 "[" {
-    System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.CORIZQ, yyline, (int) yychar, yytext());
+    imprimir("CORIZQ");
+    return new Symbol(sym.CORIZQ, yyline+1, yycolumn+1, yytext());
 }
 
 "]" {
-    System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.CORDER, yyline, (int) yychar, yytext());
+    imprimir("CORDER");
+    return new Symbol(sym.CORDER, yyline+1, yycolumn+1, yytext());
 }
 
 // ================= OPERADORES =================
 "+" {
-    System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.MAS, yyline, (int) yychar, yytext());
+    imprimir("MAS");
+    return new Symbol(sym.MAS, yyline+1, yycolumn+1, yytext());
 }
 
 "-" {
-    System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.MENOS, yyline, (int) yychar, yytext());
+    imprimir("MENOS");
+    return new Symbol(sym.MENOS, yyline+1, yycolumn+1, yytext());
 }
 
 "*" {
-    System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.POR, yyline, (int) yychar, yytext());
+    imprimir("POR");
+    return new Symbol(sym.POR, yyline+1, yycolumn+1, yytext());
 }
 
 "/" {
-    System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.DIVIDIDO, yyline, (int) yychar, yytext());
+    imprimir("DIVIDIDO");
+    return new Symbol(sym.DIVIDIDO, yyline+1, yycolumn+1, yytext());
 }
 
 // ================= NÚMEROS =================
 {DD} {
-    System.out.println("Token reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.DECIMAL, yyline, (int) yychar, yytext());
+    imprimir("DECIMAL");
+    return new Symbol(sym.DECIMAL, yyline+1, yycolumn+1, yytext());
 }
 
 {D} {
-    System.out.println("Token reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.ENTERO, yyline, (int) yychar, yytext());
+    imprimir("ENTERO");
+    return new Symbol(sym.ENTERO, yyline+1, yycolumn+1, yytext());
 }
 
+// ================= ESPACIOS =================
+[\t\r\n\f ]   { /* ignorar */ }
 
-
-[\t\r\n\f ]          { }
-
+// ================= ERRORES =================
 . {
-    //listaErrores.add(Error);
-    System.out.println(
-        "Error Léxico: " + yytext() +
-        " en línea: " + yyline +
-        " columna: " + yychar
-    );
+    String error = 
+        "ERROR LÉXICO -> '" + yytext() +
+        "' Línea: " + (yyline + 1) +
+        " Columna: " + (yycolumn + 1);
+
+    
 }
-
-

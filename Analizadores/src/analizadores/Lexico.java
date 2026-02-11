@@ -3,8 +3,10 @@
 // source: Lexico.jflex
 
 package analizadores;
-import java_cup.runtime.*;
+
+import java_cup.runtime.Symbol;
 import java.util.LinkedList;
+
 
 @SuppressWarnings("fallthrough")
 public class Lexico implements java_cup.runtime.Scanner {
@@ -270,10 +272,10 @@ public class Lexico implements java_cup.runtime.Scanner {
   private int yyline;
 
   /** Number of characters from the last newline up to the start of the matched text. */
-  @SuppressWarnings("unused")
   private int yycolumn;
 
   /** Number of characters up to the start of the matched text. */
+  @SuppressWarnings("unused")
   private long yychar;
 
   /** Whether the scanner is currently at the beginning of a line. */
@@ -284,7 +286,17 @@ public class Lexico implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+
     LinkedList<String> listaErrores = new LinkedList<>();
+
+    private void imprimir(String token){
+        System.out.println(
+            "Token: " + token +
+            " | Lexema: '" + yytext() + "'" +
+            " | Linea: " + (yyline + 1) +
+            " | Columna: " + (yycolumn + 1)
+        );
+    }
 
 
 
@@ -294,8 +306,8 @@ public class Lexico implements java_cup.runtime.Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public Lexico(java.io.Reader in) {
-      yyline = 1;
-    yychar = 1;
+      yyline = 0;
+    yycolumn = 0;
     this.zzReader = in;
   }
 
@@ -589,8 +601,6 @@ public class Lexico implements java_cup.runtime.Scanner {
     while (true) {
       zzMarkedPosL = zzMarkedPos;
 
-      yychar+= zzMarkedPosL-zzStartRead;
-
       boolean zzR = false;
       int zzCh;
       int zzCharCount;
@@ -606,10 +616,12 @@ public class Lexico implements java_cup.runtime.Scanner {
         case '\u2028':  // fall through
         case '\u2029':
           yyline++;
+          yycolumn = 0;
           zzR = false;
           break;
         case '\r':
           yyline++;
+          yycolumn = 0;
           zzR = true;
           break;
         case '\n':
@@ -617,10 +629,12 @@ public class Lexico implements java_cup.runtime.Scanner {
             zzR = false;
           else {
             yyline++;
+            yycolumn = 0;
           }
           break;
         default:
           zzR = false;
+          yycolumn += zzCharCount;
         }
       }
 
@@ -712,83 +726,81 @@ public class Lexico implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { //listaErrores.add(Error);
-    System.out.println(
-        "Error Léxico: " + yytext() +
-        " en línea: " + yyline +
-        " columna: " + yychar
-    );
+            { String error = 
+        "ERROR LÉXICO -> '" + yytext() +
+        "' Línea: " + (yyline + 1) +
+        " Columna: " + (yycolumn + 1);
             }
           // fall through
           case 14: break;
           case 2:
-            { 
+            { /* ignorar */
             }
           // fall through
           case 15: break;
           case 3:
-            { System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PARIZQ, yyline, (int) yychar, yytext());
+            { imprimir("PARIZQ");
+    return new Symbol(sym.PARIZQ, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 16: break;
           case 4:
-            { System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PARDER, yyline, (int) yychar, yytext());
+            { imprimir("PARDER");
+    return new Symbol(sym.PARDER, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 17: break;
           case 5:
-            { System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.POR, yyline, (int) yychar, yytext());
+            { imprimir("POR");
+    return new Symbol(sym.POR, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 18: break;
           case 6:
-            { System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.MAS, yyline, (int) yychar, yytext());
+            { imprimir("MAS");
+    return new Symbol(sym.MAS, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 19: break;
           case 7:
-            { System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.MENOS, yyline, (int) yychar, yytext());
+            { imprimir("MENOS");
+    return new Symbol(sym.MENOS, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 20: break;
           case 8:
-            { System.out.println("Operador reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.DIVIDIDO, yyline, (int) yychar, yytext());
+            { imprimir("DIVIDIDO");
+    return new Symbol(sym.DIVIDIDO, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 21: break;
           case 9:
-            { System.out.println("Token reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.DECIMAL, yyline, (int) yychar, yytext());
+            { imprimir("DECIMAL");
+    return new Symbol(sym.DECIMAL, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 22: break;
           case 10:
-            { System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.PTCOMA, yyline, (int) yychar, yytext());
+            { imprimir("PTCOMA");
+    return new Symbol(sym.PTCOMA, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 23: break;
           case 11:
-            { System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.CORIZQ, yyline, (int) yychar, yytext());
+            { imprimir("CORIZQ");
+    return new Symbol(sym.CORIZQ, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 24: break;
           case 12:
-            { System.out.println("Simbolo reconocido: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.CORDER, yyline, (int) yychar, yytext());
+            { imprimir("CORDER");
+    return new Symbol(sym.CORDER, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 25: break;
           case 13:
-            { System.out.println("Palabra reservada reconocida: " + yyline + (int) yychar + yytext());
-    return new Symbol(sym.REVALUAR, yyline, (int) yychar, yytext());
+            { imprimir("REVALUAR");
+    return new Symbol(sym.REVALUAR, yyline+1, yycolumn+1, yytext());
             }
           // fall through
           case 26: break;

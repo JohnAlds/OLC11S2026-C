@@ -20,6 +20,14 @@ non terminal instrucciones;
 non terminal instruccion;
 non terminal Double expresion;
 
+/*
+    Precedencia de operadores
+*/
+
+precedence left MAS,MENOS;
+precedence left POR,DIVIDIDO;
+precedence right UMENOS; 
+
 start with ini; 
 
 ini ::= instrucciones;
@@ -30,7 +38,16 @@ instrucciones ::=
 ;
 
 instruccion ::= 
-   REVALUAR CORIZQ expresion:a CORDER PTCOMA {:System.out.println("El valor de la expresión es: "+a);:}
+   REVALUAR CORIZQ expresion:a CORDER PTCOMA {:System.out.println("El valor de la expresion es: "+a);:}
 ;
 
-
+expresion  ::= 
+    MENOS expresion:a                      {:RESULT=a*-1;:}%prec UMENOS     
+ |  expresion:a MAS        expresion:b     {:RESULT=a+b;:}
+ |  expresion:a MENOS      expresion:b     {:RESULT=a-b;:}
+ |  expresion:a POR        expresion:b     {:RESULT=a*b;:}
+ |  expresion:a DIVIDIDO   expresion:b     {:RESULT=a/b;:}
+ |  ENTERO:a                               {:RESULT=new Double(a);:}
+ |  DECIMAL:a                              {:RESULT=new Double(a);:}
+ |  PARIZQ expresion:a PARDER              {:RESULT=a;:}
+;
