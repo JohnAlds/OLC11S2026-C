@@ -1,6 +1,9 @@
 package analizadores;
 import java_cup.runtime.*;
 
+
+
+
 /*
     Terminales
 */
@@ -28,7 +31,7 @@ precedence left MAS,MENOS;
 precedence left POR,DIVIDIDO;
 precedence right UMENOS; 
 
-start with ini; 
+start with ini; /* Indicamos donde comienza la gramatica  */  
 
 ini ::= instrucciones;
 
@@ -39,15 +42,39 @@ instrucciones ::=
 
 instruccion ::= 
    REVALUAR CORIZQ expresion:a CORDER PTCOMA {:System.out.println("El valor de la expresion es: "+a);:}
+ /* EVALUAR   [        27          ]        ; /*
+;
+  
+expresion  ::= 
+    MENOS expresion:a                      {:RESULT=a*-1;:}%prec UMENOS    
+  /*  -              */
+ |  expresion:a MAS        expresion:b     {:RESULT=a+b;:}
+  /*     24       +              5   */
+ |  expresion:a MENOS      expresion:b     {:RESULT=a-b;:}
+  /*      29        -        2 /*
+ |  expresion:a POR        expresion:b     {:RESULT=a*b;:}
+  /*    8         *            3   */ 
+|  expresion:a DIVIDIDO   expresion:b     {:RESULT=a/b;:}
+  /*               /             */
+ |  ENTERO:a                               {:RESULT=new Double(a);:}
+ /*       8 y 3        */
+ |  DECIMAL:a                             {:RESULT=new Double(a);:}
+  /*                */
+ |  PARIZQ expresion:a PARDER              {:RESULT=a;:}
+ /*   (                  )  */
 ;
 
-expresion  ::= 
-    MENOS expresion:a                      {:RESULT=a*-1;:}%prec UMENOS     
- |  expresion:a MAS        expresion:b     {:RESULT=a+b;:}
- |  expresion:a MENOS      expresion:b     {:RESULT=a-b;:}
- |  expresion:a POR        expresion:b     {:RESULT=a*b;:}
- |  expresion:a DIVIDIDO   expresion:b     {:RESULT=a/b;:}
- |  ENTERO:a                               {:RESULT=new Double(a);:}
- |  DECIMAL:a                              {:RESULT=new Double(a);:}
- |  PARIZQ expresion:a PARDER              {:RESULT=a;:}
-;
+
+/*  
+    EVALUAR[8*3+5-2]; 
+    EVALUAR[24+5-2];
+    EVALUAR[29-2];
+    EVALUAR[27];
+*/ 
+
+/*
+   10 -(10/5)
+   10 -(2)
+   10 - 2
+   8
+ */ 

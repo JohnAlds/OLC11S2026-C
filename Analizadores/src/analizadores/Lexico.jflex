@@ -37,6 +37,8 @@ import java.util.LinkedList;
 // ================= EXPRESIONES REGULARES =================
 D       = [0-9]+
 DD      = [0-9]+("."[0-9]+)?
+comentario1 = "//".*
+comentario2 = "/*"[^"\""]+"*/"
 
 %%
 
@@ -104,6 +106,15 @@ DD      = [0-9]+("."[0-9]+)?
     return new Symbol(sym.ENTERO, yyline+1, yycolumn+1, yytext());
 }
 
+// ================= COMENTARIOS =================
+{comentario1} {
+    imprimir("COMENTARIO1");
+}
+
+{comentario2} {
+    imprimir("COMENTARIO2");
+}
+
 // ================= ESPACIOS =================
 [\t\r\n\f ]   { /* ignorar */ }
 
@@ -112,7 +123,5 @@ DD      = [0-9]+("."[0-9]+)?
     String error = 
         "ERROR LÉXICO -> '" + yytext() +
         "' Línea: " + (yyline + 1) +
-        " Columna: " + (yycolumn + 1);
-
-    
+        " Columna: " + (yycolumn + 1);   
 }
