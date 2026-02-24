@@ -1,0 +1,118 @@
+package analizalizadores;
+import java_cup.runtime.*;
+
+import Simbolo.tipoDato;
+import java.util.LinkedList;
+
+import Abstract.Instruccion;
+
+
+/*
+    Instrucciones
+*/
+import Instrucciones.Database;
+import Instrucciones.CreateTable;
+
+/*
+    Terminales
+*/
+
+/*
+==============  RESERVADAS ==============
+*/
+terminal String DATABASE;
+terminal String STORE;
+terminal String AT;
+terminal String USE;
+terminal String TABLE;
+terminal String RDOUBLE;
+terminal String RSTRING;
+terminal String RINT;
+
+/*
+==============  SIMBOLOS ==============
+*/
+terminal String PTCOMA;
+terminal String PARIZQ;
+terminal String PARDER;
+terminal String CORIZQ;
+terminal String CORDER;
+terminal String DOSPT;
+terminal String LLAVEIZQ;
+terminal String LLAVEDER;
+
+
+/*
+==============  OPERADORES ==============
+*/
+
+terminal String MAS; 
+terminal String MENOS;
+terminal String POR;
+terminal String DIVIDIDO;
+
+/*
+============== ID ==============
+*/
+terminal String IDENTIFICADOR;
+
+/*
+============== DATOS ==============
+*/
+
+terminal String ENTERO;
+terminal String DECIMAL;
+terminal String CADENA;
+
+/*
+    No terminales
+*/
+
+non terminal LinkedList<Instruccion> START;
+non terminal LinkedList<Instruccion> INSTRUCCIONES;
+non terminal Instruccion INSTRUCCION;
+non terminal DECLSTABLE;
+non terminal DECL;
+non terminal TIPODATO;
+
+/*
+=======================  PRODUCCIONES ============================
+*/
+
+start with START;
+
+START ::=  INSTRUCCIONES:a                                                      {: RESULT = a; :}
+;
+
+INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b                                 {: RESULT = a; RESULT.add(b); :}
+                 |INSTRUCCION:a                                                 {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+
+INSTRUCCION ::= DATABASE IDENTIFICADOR:a LLAVEIZQ STORE AT CADENA:b PTCOMA LLAVEDER     {: RESULT = new Database(a, b, aright, aleft);:}
+               |USE IDENTIFICADOR PTCOMA
+               |TABLE IDENTIFICADOR:a LLAVEIZQ DECLSTABLE:b LLAVEDER                    {: RESULT = new CreateTable(a, b, aright, aleft);:}
+;
+
+DECLSTABLE ::= DECLSTABLE:a DECL:b
+              {:
+                  a.putAll(b);
+                  RESULT = a;
+              :}
+              | DECL:a
+              {:
+                  RESULT = a;
+              :}
+;
+
+DECL ::= IDENTIFICADOR:a DOSPT TIPODATO:b PTCOMA
+        {:
+            HashMap<String, String> map = new HashMap<>();
+            map.put(a.toString(), b);
+            RESULT = map;
+        :}
+;
+
+TIPODATO ::= RDOUBLE:a          {:  RESULT = a;:}
+            |RSTRING:a          {:  RESULT = a;:}
+            |RINT:a             {:  RESULT = a;:}
+;
