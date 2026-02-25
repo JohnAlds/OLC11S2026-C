@@ -1,10 +1,11 @@
 package analizalizadores;
 import java_cup.runtime.*;
 
-import Simbolo.tipoDato;
+import Simbolo.tipoInstruccion;
 import java.util.LinkedList;
-
+import java.util.HashMap;
 import Abstract.Instruccion;
+import java.util.Map;
 
 
 /*
@@ -12,6 +13,7 @@ import Abstract.Instruccion;
 */
 import Instrucciones.Database;
 import Instrucciones.CreateTable;
+import Instrucciones.UseDatabase;
 
 /*
     Terminales
@@ -71,8 +73,8 @@ terminal String CADENA;
 non terminal LinkedList<Instruccion> START;
 non terminal LinkedList<Instruccion> INSTRUCCIONES;
 non terminal Instruccion INSTRUCCION;
-non terminal DECLSTABLE;
-non terminal DECL;
+non terminal HashMap<String, String> DECLSTABLE;
+non terminal HashMap<String, String> DECL;
 non terminal TIPODATO;
 
 /*
@@ -89,7 +91,7 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b                                 
 ;
 
 INSTRUCCION ::= DATABASE IDENTIFICADOR:a LLAVEIZQ STORE AT CADENA:b PTCOMA LLAVEDER     {: RESULT = new Database(a, b, aright, aleft);:}
-               |USE IDENTIFICADOR PTCOMA
+               |USE IDENTIFICADOR:a PTCOMA                                              {: RESULT = new UseDatabase(a, aright, aleft);:}
                |TABLE IDENTIFICADOR:a LLAVEIZQ DECLSTABLE:b LLAVEDER                    {: RESULT = new CreateTable(a, b, aright, aleft);:}
 ;
 
@@ -107,12 +109,12 @@ DECLSTABLE ::= DECLSTABLE:a DECL:b
 DECL ::= IDENTIFICADOR:a DOSPT TIPODATO:b PTCOMA
         {:
             HashMap<String, String> map = new HashMap<>();
-            map.put(a.toString(), b);
+            map.put(a.toString(), b.toString());
             RESULT = map;
         :}
 ;
 
-TIPODATO ::= RDOUBLE:a          {:  RESULT = a;:}
-            |RSTRING:a          {:  RESULT = a;:}
-            |RINT:a             {:  RESULT = a;:}
+TIPODATO ::= RDOUBLE:a          {:  RESULT = a.toString();:}
+            |RSTRING:a          {:  RESULT = a.toString();:}
+            |RINT:a             {:  RESULT = a.toString();:}
 ;

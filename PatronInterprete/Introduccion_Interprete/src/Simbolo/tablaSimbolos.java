@@ -14,9 +14,11 @@ import java.util.HashMap;
 public class tablaSimbolos {
     private tablaSimbolos tablaAnterior;
     private HashMap<String, Object> tablaActual;
+    private String useDatabase;
     
     public tablaSimbolos() {
         this.tablaActual = new HashMap<>();
+        this.useDatabase = "";
     }
     
     public tablaSimbolos(tablaSimbolos tablaAnterior) {
@@ -47,6 +49,27 @@ public class tablaSimbolos {
     
     public void addDB(String id, String ruta, int linea, int columna){
         DatabaseMemory nuevaBase = new DatabaseMemory(id, ruta);
-        tablaActual.put(id, new Simbolo(new Tipo(tipoDato.DATABASE), id, nuevaBase, linea, columna));
+        tablaActual.put(id, new Simbolo(new Tipo(tipoInstruccion.DATABASE), id, nuevaBase, linea, columna));
+    }
+    
+    public DatabaseMemory getDB(String id) {
+        Simbolo simbolo = (Simbolo) tablaActual.get(id);
+        if (simbolo == null) {
+            System.out.println("Base de datos '" + id + "' no encontrada.");
+            return null;
+        }
+        if (simbolo.getTipo().getTipo() != tipoInstruccion.DATABASE) {
+            System.out.println("El identificador '" + id + "' no es una base de datos.");
+            return null;
+        }
+        return (DatabaseMemory) simbolo.getValor();
+    }
+
+    public void setUseDatabase(String useDatabase) {
+        this.useDatabase = useDatabase;
+    }
+    
+    public String getUseDatabase(){
+        return this.useDatabase;
     }
 }

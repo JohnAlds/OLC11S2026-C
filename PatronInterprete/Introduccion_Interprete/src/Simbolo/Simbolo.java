@@ -14,6 +14,7 @@ public class Simbolo {
     private Object valor;
     private int linea, columna;
     
+    // Constructores (corrige el tercero)
     public Simbolo(Tipo tipo, String id) {
         this.tipo = tipo;
         this.id = id;
@@ -29,8 +30,28 @@ public class Simbolo {
         this.tipo = tipo;
         this.id = id;
         this.valor = valor;
+        this.linea = linea;   // ¡Estaba faltando!
+        this.columna = columna;
     }
-
-  
     
+    // Getters
+    public Tipo getTipo() {
+        return tipo;
+    }
+    
+    public String getId() {
+        return id;
+    }
+    
+    public Object getValor() {
+        return valor;
+    }
+    
+    public int getLinea() {
+        return linea;
+    }
+    
+    public int getColumna() {
+        return columna;
+    }
 }

@@ -44,4 +44,7 @@ public class Tabla {
     public String getNombre() {
         return nombre;
     }
+    
+    
+    
 }

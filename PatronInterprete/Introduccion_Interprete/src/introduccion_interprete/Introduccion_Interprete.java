@@ -19,9 +19,17 @@ public class Introduccion_Interprete {
         Analizar a = new Analizar();
         
         String texto = """
-            database Universidad { 
+            database universidad { 
                 store at "archivo.json"; 
             } 
+                       
+            use universidad; 
+                       
+            table estudiantes { 
+                id : int; 
+                nombre : string; 
+                edad : int; 
+            }
         """;
         
         

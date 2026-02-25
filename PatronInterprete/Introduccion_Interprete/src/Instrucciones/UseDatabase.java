@@ -14,27 +14,24 @@ import Simbolo.tipoInstruccion;
  *
  * @author JohnAlds
  */
-public class Database extends Instruccion{
-
-    private String idDataBase;
-    private String ruta;
+public class UseDatabase extends Instruccion {
     
-    public Database(String idDataBase, String ruta, int linea, int col) {
-        super(new Tipo(tipoInstruccion.DATABASE), linea, col);
-        this.idDataBase = idDataBase;
-        this.ruta = ruta;
-        
+    private String id;
+
+    public UseDatabase(String id, int linea, int col) {
+        super(new Tipo(tipoInstruccion.USEDATABASE), linea, col);
+        this.id = id;
     }
 
     @Override
     public Object interpretar(Arbol arbol, tablaSimbolos tabla) {
         
-        if(tabla.getTablaActual().containsKey(this.idDataBase)){
-            System.out.println("Error base de datos ya existe");
+        if(!tabla.getTablaActual().containsKey(this.id)){
+            System.out.println("Error base de datos no  existe");
             return null;
         }
         
-        tabla.addDB(this.idDataBase, this.ruta, linea, col);
+        tabla.setUseDatabase(id);
         
         return null;
     }

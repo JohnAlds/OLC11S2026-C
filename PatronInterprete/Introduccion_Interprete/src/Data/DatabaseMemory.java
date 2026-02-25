@@ -31,8 +31,25 @@ public class DatabaseMemory {
     public Tabla getTabla(String nombre) {
         return tablas.get(nombre);
     }
+    
+    public boolean existTabla(String nombre){
+        return tablas.containsKey(nombre);
+    }
 
     public Map<String, Tabla> getTablas() {
         return tablas;
+    }
+    
+     public void createTable(String nombreTabla, Map<String, String> schema) {
+        // Crear la nueva tabla
+        Tabla nuevaTabla = new Tabla(nombreTabla);
+
+        // Agregar cada campo definido en el esquema
+        for (Map.Entry<String, String> campo : schema.entrySet()) {
+            nuevaTabla.addCampo(campo.getKey(), campo.getValue());
+        }
+
+        // Guardar la tabla en el mapa de tablas
+        addTabla(nuevaTabla);
     }
 }

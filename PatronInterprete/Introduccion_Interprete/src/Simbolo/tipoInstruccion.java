@@ -9,8 +9,9 @@ package Simbolo;
  *
  * @author JohnAlds
  */
-public enum tipoDato {
+public enum tipoInstruccion {
     DATABASE,
     CREATETABLE,
+    USEDATABASE,
     VOID
 }

@@ -9,17 +9,17 @@ package Simbolo;
  * @author JohnAlds
  */
 public class Tipo {
-    private tipoDato tipo;
+    private tipoInstruccion tipo;
 
-    public Tipo(tipoDato tipo) {
+    public Tipo(tipoInstruccion tipo) {
         this.tipo = tipo;
     }
 
-    public tipoDato getTipo() {
+    public tipoInstruccion getTipo() {
         return tipo;
     }
 
-    public void setTipo(tipoDato tipo) {
+    public void setTipo(tipoInstruccion tipo) {
         this.tipo = tipo;
     }
     
