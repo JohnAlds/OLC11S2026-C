@@ -2,6 +2,7 @@ package analizalizadores;
 import java_cup.runtime.*;
 
 import Simbolo.tipoInstruccion;
+import Simbolo.tipoDato;
 import java.util.LinkedList;
 import java.util.HashMap;
 import Abstract.Instruccion;
@@ -14,6 +15,13 @@ import java.util.Map;
 import Instrucciones.Database;
 import Instrucciones.CreateTable;
 import Instrucciones.UseDatabase;
+
+/*
+    Expresiones
+*/
+import Expresiones.Nativo;
+import Expresiones.Suma;
+
 
 /*
     Terminales
@@ -77,6 +85,17 @@ non terminal HashMap<String, String> DECLSTABLE;
 non terminal HashMap<String, String> DECL;
 non terminal TIPODATO;
 
+non terminal Instruccion EXP;
+
+
+/*
+=======================  PRECEDENCIA ============================
+*/
+
+precedence left MAS, MENOS;
+precedence left POR, DIVIDIDO;
+
+
 /*
 =======================  PRODUCCIONES ============================
 */
@@ -93,6 +112,7 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b                                 
 INSTRUCCION ::= DATABASE IDENTIFICADOR:a LLAVEIZQ STORE AT CADENA:b PTCOMA LLAVEDER     {: RESULT = new Database(a, b, aright, aleft);:}
                |USE IDENTIFICADOR:a PTCOMA                                              {: RESULT = new UseDatabase(a, aright, aleft);:}
                |TABLE IDENTIFICADOR:a LLAVEIZQ DECLSTABLE:b LLAVEDER                    {: RESULT = new CreateTable(a, b, aright, aleft);:}
+               |EXP:a                                                                   {: RESULT = a;:}
 ;
 
 DECLSTABLE ::= DECLSTABLE:a DECL:b
@@ -118,3 +138,12 @@ TIPODATO ::= RDOUBLE:a          {:  RESULT = a.toString();:}
             |RSTRING:a          {:  RESULT = a.toString();:}
             |RINT:a             {:  RESULT = a.toString();:}
 ;
+
+EXP ::= ENTERO:a                    {: RESULT =  new Nativo(Integer.parseInt(a), new Tipo(tipoDato.ENTERO), aright, aleft);:}
+       |DECIMAL:a                   {: RESULT =  new Nativo(new Double(a), new Tipo(tipoDato.DECIMAL), aright, aleft);:}
+       |CADENA:a                    {: RESULT =  new Nativo(a, new Tipo(tipoDato.CADENA), aright, aleft);:}
+       |ID:a
+       |EXP:a  MAS EXP:b             {: RESULT =  new Suma(a, b, OperadoresAritmeticos.SUMA, aright, aleft );               :}
+;
+
+ edad <= 18

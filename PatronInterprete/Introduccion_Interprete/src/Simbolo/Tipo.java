@@ -10,9 +10,14 @@ package Simbolo;
  */
 public class Tipo {
     private tipoInstruccion tipo;
+    private tipoDato dato;
 
     public Tipo(tipoInstruccion tipo) {
         this.tipo = tipo;
+    }
+    
+    public Tipo(tipoDato dato) {
+        this.dato = dato;
     }
 
     public tipoInstruccion getTipo() {
@@ -22,5 +27,15 @@ public class Tipo {
     public void setTipo(tipoInstruccion tipo) {
         this.tipo = tipo;
     }
+    
+    
+    public tipoDato getTipoDato() {
+        return dato;
+    }
+
+    public void setTipoDato(tipoDato dato) {
+        this.dato = dato;
+    }
+    
     
 }

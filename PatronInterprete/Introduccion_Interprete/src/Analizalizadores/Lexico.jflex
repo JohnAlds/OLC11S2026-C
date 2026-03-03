@@ -179,15 +179,16 @@ CADENA = \"([^\"\\]|\\[btnfr\"\'\\])*\"
     return new Symbol(sym.CADENA, yyline+1, yycolumn+1, yytext());
 }
 
+{D} {
+    imprimir("ENTERO");
+    return new Symbol(sym.ENTERO, yyline+1, yycolumn+1, yytext());
+}
+
 {DD} {
     imprimir("DECIMAL");
     return new Symbol(sym.DECIMAL, yyline+1, yycolumn+1, yytext());
 }
 
-{D} {
-    imprimir("ENTERO");
-    return new Symbol(sym.ENTERO, yyline+1, yycolumn+1, yytext());
-}
 
 
 
@@ -202,4 +203,6 @@ CADENA = \"([^\"\\]|\\[btnfr\"\'\\])*\"
         "ERROR LÉXICO -> '" + yytext() +
         "' Línea: " + (yyline + 1) +
         " Columna: " + (yycolumn + 1);   
+
+    System.out.println(error);
 }

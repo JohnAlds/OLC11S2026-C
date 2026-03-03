@@ -7,6 +7,7 @@ package analizalizadores;
 
 import java_cup.runtime.*;
 import Simbolo.tipoInstruccion;
+import Simbolo.tipoDato;
 import java.util.LinkedList;
 import java.util.HashMap;
 import Abstract.Instruccion;
@@ -14,6 +15,10 @@ import java.util.Map;
 import Instrucciones.Database;
 import Instrucciones.CreateTable;
 import Instrucciones.UseDatabase;
+import Expresiones.Nativo;
+import Expresiones.OperadoresAritmeticos;
+import Expresiones.Suma;
+import Simbolo.Tipo;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -39,11 +44,12 @@ public class Sintactico extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\015\000\002\002\004\000\002\002\003\000\002\003" +
+    "\000\022\000\002\002\004\000\002\002\003\000\002\003" +
     "\004\000\002\003\003\000\002\004\012\000\002\004\005" +
-    "\000\002\004\007\000\002\005\004\000\002\005\003\000" +
-    "\002\006\006\000\002\007\003\000\002\007\003\000\002" +
-    "\007\003" });
+    "\000\002\004\007\000\002\004\003\000\002\005\004\000" +
+    "\002\005\003\000\002\006\006\000\002\007\003\000\002" +
+    "\007\003\000\002\007\003\000\002\010\003\000\002\010" +
+    "\003\000\002\010\003\000\002\010\005" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -51,25 +57,37 @@ public class Sintactico extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\037\000\010\004\006\007\010\010\007\001\002\000" +
-    "\012\002\ufffe\004\ufffe\007\ufffe\010\ufffe\001\002\000\012" +
-    "\002\000\004\006\007\010\010\007\001\002\000\004\030" +
-    "\032\001\002\000\004\030\015\001\002\000\004\030\013" +
-    "\001\002\000\004\002\012\001\002\000\004\002\001\001" +
-    "\002\000\004\014\014\001\002\000\012\002\ufffc\004\ufffc" +
-    "\007\ufffc\010\ufffc\001\002\000\004\022\016\001\002\000" +
-    "\004\030\020\001\002\000\006\023\030\030\020\001\002" +
-    "\000\004\021\022\001\002\000\006\023\ufff9\030\ufff9\001" +
-    "\002\000\010\011\024\012\023\013\025\001\002\000\004" +
-    "\014\ufff6\001\002\000\004\014\ufff7\001\002\000\004\014" +
-    "\ufff5\001\002\000\004\014\027\001\002\000\006\023\ufff8" +
-    "\030\ufff8\001\002\000\012\002\ufffb\004\ufffb\007\ufffb\010" +
-    "\ufffb\001\002\000\006\023\ufffa\030\ufffa\001\002\000\004" +
-    "\022\033\001\002\000\004\005\034\001\002\000\004\006" +
-    "\035\001\002\000\004\033\036\001\002\000\004\014\037" +
-    "\001\002\000\004\023\040\001\002\000\012\002\ufffd\004" +
-    "\ufffd\007\ufffd\010\ufffd\001\002\000\012\002\uffff\004\uffff" +
-    "\007\uffff\010\uffff\001\002" });
+    "\000\045\000\016\004\007\007\011\010\012\031\010\032" +
+    "\006\033\004\001\002\000\022\002\ufff1\004\ufff1\007\ufff1" +
+    "\010\ufff1\024\ufff1\031\ufff1\032\ufff1\033\ufff1\001\002\000" +
+    "\020\002\ufffe\004\ufffe\007\ufffe\010\ufffe\031\ufffe\032\ufffe" +
+    "\033\ufffe\001\002\000\022\002\ufff2\004\ufff2\007\ufff2\010" +
+    "\ufff2\024\ufff2\031\ufff2\032\ufff2\033\ufff2\001\002\000\004" +
+    "\030\041\001\002\000\022\002\ufff3\004\ufff3\007\ufff3\010" +
+    "\ufff3\024\ufff3\031\ufff3\032\ufff3\033\ufff3\001\002\000\004" +
+    "\030\037\001\002\000\004\030\022\001\002\000\020\002" +
+    "\000\004\007\007\011\010\012\031\010\032\006\033\004" +
+    "\001\002\000\004\002\020\001\002\000\022\002\ufffa\004" +
+    "\ufffa\007\ufffa\010\ufffa\024\016\031\ufffa\032\ufffa\033\ufffa" +
+    "\001\002\000\010\031\010\032\006\033\004\001\002\000" +
+    "\022\002\ufff0\004\ufff0\007\ufff0\010\ufff0\024\ufff0\031\ufff0" +
+    "\032\ufff0\033\ufff0\001\002\000\004\002\001\001\002\000" +
+    "\020\002\uffff\004\uffff\007\uffff\010\uffff\031\uffff\032\uffff" +
+    "\033\uffff\001\002\000\004\022\023\001\002\000\004\030" +
+    "\025\001\002\000\006\023\035\030\025\001\002\000\004" +
+    "\021\027\001\002\000\006\023\ufff8\030\ufff8\001\002\000" +
+    "\010\011\030\012\031\013\032\001\002\000\004\014\ufff6" +
+    "\001\002\000\004\014\ufff5\001\002\000\004\014\ufff4\001" +
+    "\002\000\004\014\034\001\002\000\006\023\ufff7\030\ufff7" +
+    "\001\002\000\020\002\ufffb\004\ufffb\007\ufffb\010\ufffb\031" +
+    "\ufffb\032\ufffb\033\ufffb\001\002\000\006\023\ufff9\030\ufff9" +
+    "\001\002\000\004\014\040\001\002\000\020\002\ufffc\004" +
+    "\ufffc\007\ufffc\010\ufffc\031\ufffc\032\ufffc\033\ufffc\001\002" +
+    "\000\004\022\042\001\002\000\004\005\043\001\002\000" +
+    "\004\006\044\001\002\000\004\033\045\001\002\000\004" +
+    "\014\046\001\002\000\004\023\047\001\002\000\020\002" +
+    "\ufffd\004\ufffd\007\ufffd\010\ufffd\031\ufffd\032\ufffd\033\ufffd" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -77,17 +95,20 @@ public class Sintactico extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\037\000\010\002\010\003\004\004\003\001\001\000" +
-    "\002\001\001\000\004\004\040\001\001\000\002\001\001" +
+    "\000\045\000\012\002\013\003\012\004\004\010\014\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\006\004\020\010\014\001\001\000\002" +
+    "\001\001\000\002\001\001\000\004\010\016\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\006\005\016\006\020\001\001\000\004\006" +
-    "\030\001\001\000\002\001\001\000\002\001\001\000\004" +
-    "\007\025\001\001\000\002\001\001\000\002\001\001\000" +
+    "\001\001\000\006\005\023\006\025\001\001\000\004\006" +
+    "\035\001\001\000\002\001\001\000\002\001\001\000\004" +
+    "\007\032\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001" });
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -245,7 +266,19 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // DECLSTABLE ::= DECLSTABLE DECL 
+          case 7: // INSTRUCCION ::= EXP 
+            {
+              Instruccion RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		Instruccion a = (Instruccion)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 RESULT = a;
+              CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("INSTRUCCION",2, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
+            }
+          return CUP$Sintactico$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 8: // DECLSTABLE ::= DECLSTABLE DECL 
             {
               HashMap<String,String> RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-1)).left;
@@ -263,7 +296,7 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // DECLSTABLE ::= DECL 
+          case 9: // DECLSTABLE ::= DECL 
             {
               HashMap<String,String> RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
@@ -277,7 +310,7 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // DECL ::= IDENTIFICADOR DOSPT TIPODATO PTCOMA 
+          case 10: // DECL ::= IDENTIFICADOR DOSPT TIPODATO PTCOMA 
             {
               HashMap<String,String> RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-3)).left;
@@ -296,7 +329,7 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // TIPODATO ::= RDOUBLE 
+          case 11: // TIPODATO ::= RDOUBLE 
             {
               Object RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
@@ -308,7 +341,7 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // TIPODATO ::= RSTRING 
+          case 12: // TIPODATO ::= RSTRING 
             {
               Object RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
@@ -320,7 +353,7 @@ class CUP$Sintactico$actions {
           return CUP$Sintactico$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // TIPODATO ::= RINT 
+          case 13: // TIPODATO ::= RINT 
             {
               Object RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
@@ -328,6 +361,57 @@ class CUP$Sintactico$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
 		  RESULT = a.toString();
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("TIPODATO",5, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
+            }
+          return CUP$Sintactico$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 14: // EXP ::= ENTERO 
+            {
+              Instruccion RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 RESULT =  new Nativo(Integer.parseInt(a), new Tipo(tipoDato.ENTERO), aright, aleft);
+              CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("EXP",6, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
+            }
+          return CUP$Sintactico$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 15: // EXP ::= DECIMAL 
+            {
+              Instruccion RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 RESULT =  new Nativo(new Double(a), new Tipo(tipoDato.DECIMAL), aright, aleft);
+              CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("EXP",6, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
+            }
+          return CUP$Sintactico$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 16: // EXP ::= CADENA 
+            {
+              Instruccion RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 RESULT =  new Nativo(a, new Tipo(tipoDato.CADENA), aright, aleft);
+              CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("EXP",6, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
+            }
+          return CUP$Sintactico$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 17: // EXP ::= EXP MAS EXP 
+            {
+              Instruccion RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)).right;
+		Instruccion a = (Instruccion)((java_cup.runtime.Symbol) CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		Instruccion b = (Instruccion)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 RESULT =  new Suma(a, b, OperadoresAritmeticos.SUMA, aright, aleft );                               
+              CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("EXP",6, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
 

@@ -105,10 +105,10 @@ public class Lexico implements java_cup.runtime.Scanner {
     "\1\0\1\1\1\2\1\1\1\3\1\4\1\5\1\6"+
     "\1\7\1\10\1\11\1\12\1\13\7\14\1\15\1\16"+
     "\1\17\1\20\2\1\1\0\1\21\2\0\1\22\1\0"+
-    "\1\23\6\14\4\0\1\11\2\14\1\24\3\14\2\25"+
-    "\1\24\3\0\4\14\1\0\1\14\1\0\1\26\2\14"+
-    "\1\27\1\14\1\0\1\30\1\27\1\14\1\31\2\32"+
-    "\1\14\1\0\2\33";
+    "\1\23\6\14\4\0\1\24\2\14\1\25\3\14\2\26"+
+    "\1\25\3\0\4\14\1\0\1\14\1\0\1\27\2\14"+
+    "\1\30\1\14\1\0\1\31\1\30\1\14\1\32\2\33"+
+    "\1\14\1\0\2\34";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[79];
@@ -788,163 +788,171 @@ public class Lexico implements java_cup.runtime.Scanner {
             { String error = 
         "ERROR LÉXICO -> '" + yytext() +
         "' Línea: " + (yyline + 1) +
-        " Columna: " + (yycolumn + 1);
+        " Columna: " + (yycolumn + 1);   
+
+    System.out.println(error);
             }
           // fall through
-          case 28: break;
+          case 29: break;
           case 2:
             { /* ignorar */
             }
           // fall through
-          case 29: break;
+          case 30: break;
           case 3:
             { imprimir("PARIZQ");
     return new Symbol(sym.PARIZQ, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 30: break;
+          case 31: break;
           case 4:
             { imprimir("PARDER");
     return new Symbol(sym.PARDER, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 31: break;
+          case 32: break;
           case 5:
             { imprimir("POR");
     return new Symbol(sym.POR, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 32: break;
+          case 33: break;
           case 6:
             { imprimir("MAS");
     return new Symbol(sym.MAS, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 33: break;
+          case 34: break;
           case 7:
             { imprimir("MENOS");
     return new Symbol(sym.MENOS, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 34: break;
+          case 35: break;
           case 8:
             { imprimir("DIVIDIDO");
     return new Symbol(sym.DIVIDIDO, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 35: break;
+          case 36: break;
           case 9:
-            { imprimir("DECIMAL");
-    return new Symbol(sym.DECIMAL, yyline+1, yycolumn+1, yytext());
+            { imprimir("ENTERO");
+    return new Symbol(sym.ENTERO, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 36: break;
+          case 37: break;
           case 10:
             { imprimir("DOSPT");
     return new Symbol(sym.DOSPT, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 37: break;
+          case 38: break;
           case 11:
             { imprimir("PTCOMA");
     return new Symbol(sym.PTCOMA, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 38: break;
+          case 39: break;
           case 12:
             { imprimir("IDENTIFICADOR");
     return new Symbol(sym.IDENTIFICADOR, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 39: break;
+          case 40: break;
           case 13:
             { imprimir("CORIZQ");
     return new Symbol(sym.CORIZQ, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 40: break;
+          case 41: break;
           case 14:
             { imprimir("CORDER");
     return new Symbol(sym.CORDER, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 41: break;
+          case 42: break;
           case 15:
             { imprimir("LLAVEIZQ");
     return new Symbol(sym.LLAVEIZQ, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 42: break;
+          case 43: break;
           case 16:
             { imprimir("LLAVEDER");
     return new Symbol(sym.LLAVEDER, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 43: break;
+          case 44: break;
           case 17:
             { imprimir("CADENA");
     return new Symbol(sym.CADENA, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 44: break;
+          case 45: break;
           case 18:
             { imprimir("COMENTARIO1");
             }
           // fall through
-          case 45: break;
+          case 46: break;
           case 19:
             { imprimir("AT");
     return new Symbol(sym.AT, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 46: break;
+          case 47: break;
           case 20:
+            { imprimir("DECIMAL");
+    return new Symbol(sym.DECIMAL, yyline+1, yycolumn+1, yytext());
+            }
+          // fall through
+          case 48: break;
+          case 21:
             { imprimir("RINT");
     return new Symbol(sym.RINT, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 47: break;
-          case 21:
+          case 49: break;
+          case 22:
             { imprimir("USE");
     return new Symbol(sym.USE, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 48: break;
-          case 22:
+          case 50: break;
+          case 23:
             { imprimir("COMENTARIO2");
             }
           // fall through
-          case 49: break;
-          case 23:
+          case 51: break;
+          case 24:
             { imprimir("STORE");
     return new Symbol(sym.STORE, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 50: break;
-          case 24:
+          case 52: break;
+          case 25:
             { imprimir("TABLE");
     return new Symbol(sym.TABLE, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 51: break;
-          case 25:
+          case 53: break;
+          case 26:
             { imprimir("RDOUBLE");
     return new Symbol(sym.RDOUBLE, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 52: break;
-          case 26:
+          case 54: break;
+          case 27:
             { imprimir("RSTRING");
     return new Symbol(sym.RSTRING, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 53: break;
-          case 27:
+          case 55: break;
+          case 28:
             { imprimir("DATABASE");
     return new Symbol(sym.DATABASE, yyline+1, yycolumn+1, yytext());
             }
           // fall through
-          case 54: break;
+          case 56: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
