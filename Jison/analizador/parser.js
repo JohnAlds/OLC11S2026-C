@@ -72,41 +72,125 @@
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,4],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,9],$V6=[5,6,7,8,9,11],$V7=[5,11];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[5,7],$V2=[1,12],$V3=[1,9],$V4=[1,10],$V5=[1,11],$V6=[1,14],$V7=[1,15],$V8=[1,16],$V9=[1,17],$Va=[10,12,13,14,15],$Vb=[10,12,13];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"expressions":3,"e":4,"EOF":5,"+":6,"-":7,"*":8,"/":9,"(":10,")":11,"NUMBER":12,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"+",7:"-",8:"*",9:"/",10:"(",11:")",12:"NUMBER"},
-productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,3],[4,1]],
+symbols_: {"error":2,"START":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"PRINT":7,"LPAREN":8,"EXPRESION":9,"RPAREN":10,"SEMICOLON":11,"MAS":12,"MENOS":13,"POR":14,"DIV":15,"INT":16,"DECIMAL":17,"CADENA":18,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"PRINT",8:"LPAREN",10:"RPAREN",11:"SEMICOLON",12:"MAS",13:"MENOS",14:"POR",15:"DIV",16:"INT",17:"DECIMAL",18:"CADENA"},
+productions_: [0,[3,2],[4,2],[4,1],[6,5],[9,3],[9,3],[9,3],[9,3],[9,1],[9,1],[9,1],[9,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1]; 
+
+            return $$[$0-1];
+        
 break;
 case 2:
- this.$ = $$[$0-2] + $$[$0]; 
+
+            $$[$0-1].push($$[$0]);
+            this.$ = $$[$0-1];
+        
 break;
 case 3:
- this.$ = $$[$0-2] - $$[$0]; 
+
+            this.$ = [];
+            this.$.push($$[$0]);
+        
 break;
 case 4:
- this.$ = $$[$0-2] * $$[$0]; 
+
+            this.$ = new Print(
+                $$[$0-2],
+                _$[$0-4].first_line,
+                _$[$0-4].first_column
+            );
+        
 break;
 case 5:
- this.$ = $$[$0-2] / $$[$0]; 
+
+            this.$ = new Suma(
+                $$[$0-2],
+                $$[$0],
+                OperadoresAritmeticos.SUMA,
+                _$[$0-2].first_line,
+                _$[$0-2].first_column
+            );
+        
 break;
 case 6:
- this.$ = $$[$0-1]; 
+
+            this.$ = new Resta(
+                $$[$0-2],
+                $$[$0],
+                OperadoresAritmeticos.RESTA,
+                _$[$0-2].first_line,
+                _$[$0-2].first_column
+            );
+        
 break;
 case 7:
- this.$ = Number(yytext); 
+
+            this.$ = new Multiplicacion(
+                $$[$0-2],
+                $$[$0],
+                OperadoresAritmeticos.MULTIPLICACION,
+                _$[$0-2].first_line,
+                _$[$0-2].first_column
+            );
+        
+break;
+case 8:
+
+            this.$ = new Division(
+                $$[$0-2],
+                $$[$0],
+                OperadoresAritmeticos.DIVISION,
+                _$[$0-2].first_line,
+                _$[$0-2].first_column
+            );
+        
+break;
+case 9:
+
+            this.$ = new Nativo(
+                Number(yytext),
+                new Tipo(tipoDato.ENTERO, true),
+                _$[$0].first_line,
+                _$[$0].first_column
+            );
+        
+break;
+case 10:
+
+            this.$ = new Nativo(
+                Number(yytext),
+                new Tipo(tipoDato.DECIMAL, true),
+                _$[$0].first_line,
+                _$[$0].first_column
+            );
+        
+break;
+case 11:
+
+            this.$ = new Nativo(
+                yytext.substring(1, yytext.length - 1),
+                new Tipo(tipoDato.CADENA, true),
+                _$[$0].first_line,
+                _$[$0].first_column
+            );
+        
+break;
+case 12:
+
+            this.$ = $$[$0-1];
+        
 break;
 }
 },
-table: [{3:1,4:2,10:$V0,12:$V1},{1:[3]},{5:[1,5],6:$V2,7:$V3,8:$V4,9:$V5},{4:10,10:$V0,12:$V1},o($V6,[2,7]),{1:[2,1]},{4:11,10:$V0,12:$V1},{4:12,10:$V0,12:$V1},{4:13,10:$V0,12:$V1},{4:14,10:$V0,12:$V1},{6:$V2,7:$V3,8:$V4,9:$V5,11:[1,15]},o($V7,[2,2],{6:$V2,7:$V3,8:$V4,9:$V5}),o($V7,[2,3],{6:$V2,7:$V3,8:$V4,9:$V5}),o($V7,[2,4],{6:$V2,7:$V3,8:$V4,9:$V5}),o($V7,[2,5],{6:$V2,7:$V3,8:$V4,9:$V5}),o($V6,[2,6])],
+table: [{3:1,4:2,6:3,7:$V0},{1:[3]},{5:[1,5],6:6,7:$V0},o($V1,[2,3]),{8:[1,7]},{1:[2,1]},o($V1,[2,2]),{8:$V2,9:8,16:$V3,17:$V4,18:$V5},{10:[1,13],12:$V6,13:$V7,14:$V8,15:$V9},o($Va,[2,9]),o($Va,[2,10]),o($Va,[2,11]),{8:$V2,9:18,16:$V3,17:$V4,18:$V5},{11:[1,19]},{8:$V2,9:20,16:$V3,17:$V4,18:$V5},{8:$V2,9:21,16:$V3,17:$V4,18:$V5},{8:$V2,9:22,16:$V3,17:$V4,18:$V5},{8:$V2,9:23,16:$V3,17:$V4,18:$V5},{10:[1,24],12:$V6,13:$V7,14:$V8,15:$V9},o($V1,[2,4]),o($Vb,[2,5],{14:$V8,15:$V9}),o($Vb,[2,6],{14:$V8,15:$V9}),o($Va,[2,7]),o($Va,[2,8]),o($Va,[2,12])],
 defaultActions: {5:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -254,6 +338,20 @@ parse: function parse(input) {
     }
     return true;
 }};
+
+
+const Print = require("../Instrucciones/Print").Print;
+const Suma = require("../Expresiones/Suma").Suma;
+const Resta = require("../Expresiones/Resta").Resta;
+const Multiplicacion = require("../Expresiones/Multiplicacion").Multiplicacion;
+const Division = require("../Expresiones/Division").Division;
+const Nativo = require("../Expresiones/Nativo").Nativo;
+
+const Tipo = require("../Simbolo/Tipo").Tipo;
+const tipoDato = require("../Simbolo/tipoDato").tipoDato;
+const OperadoresAritmeticos = require("../Expresiones/OperadoresAritmeticos").OperadoresAritmeticos;
+
+
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -582,32 +680,38 @@ options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:/* ignorar espacios */
+case 0:return 7;
 break;
-case 1:return 12;
+case 1:return 8;
 break;
-case 2:return 6;
+case 2:return 10;
 break;
-case 3:return 7;
+case 3:return 11;
 break;
-case 4:return 8;
+case 4:return 12;
 break;
-case 5:return 9;
+case 5:return 13;
 break;
-case 6:return 10;
+case 6:return 14;
 break;
-case 7:return 11;
+case 7:return 15;
 break;
-case 8:
-    console.log("Carácter no reconocido: " + yy_.yytext);
-
+case 8:return 17;
 break;
-case 9:return 5;
+case 9:return 16;
+break;
+case 10:return 18;
+break;
+case 11:/* ignorar espacios */
+break;
+case 12:return 5;
+break;
+case 13:return 'INVALIDO';
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)?\b)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\/)/,/^(?:\()/,/^(?:\))/,/^(?:.)/,/^(?:$)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9],"inclusive":true}}
+rules: [/^(?:print\b)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\/)/,/^(?:[0-9]+\.[0-9]+)/,/^(?:[0-9]+)/,/^(?:"([^\"\\]|\\[btnfr\"\'\\])*")/,/^(?:[ \t\r\n]+)/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
 });
 return lexer;
 })();

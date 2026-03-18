@@ -1,35 +1,164 @@
+%{
+
+const Print = require("../Instrucciones/Print").Print;
+const Suma = require("../Expresiones/Suma").Suma;
+const Resta = require("../Expresiones/Resta").Resta;
+const Multiplicacion = require("../Expresiones/Multiplicacion").Multiplicacion;
+const Division = require("../Expresiones/Division").Division;
+const Nativo = require("../Expresiones/Nativo").Nativo;
+
+const Tipo = require("../Simbolo/Tipo").Tipo;
+const tipoDato = require("../Simbolo/tipoDato").tipoDato;
+const OperadoresAritmeticos = require("../Expresiones/OperadoresAritmeticos").OperadoresAritmeticos;
+
+
+%}
+
 %lex
+
 %%
 
-\s+                   /* ignorar espacios */
-[0-9]+("."[0-9]+)?\b  return 'NUMBER';
-"+"                   return '+';
-"-"                   return '-';
-"*"                   return '*';
-"/"                   return '/';
-"("                   return '(';
-")"                   return ')';
+"print"                     return 'PRINT';
+"("                         return 'LPAREN';
+")"                         return 'RPAREN';
+";"                         return 'SEMICOLON';
 
-. {
-    console.log("Carácter no reconocido: " + yytext);
-}
+"+"                         return 'MAS';
+"-"                         return 'MENOS';
+"*"                         return 'POR';
+"/"                         return 'DIV';
 
-<<EOF>>               return 'EOF';
+[0-9]+"."[0-9]+             return 'DECIMAL';
+[0-9]+                      return 'INT';
+
+\"([^\"\\]|\\[btnfr\"\'\\])*\"    return 'CADENA';
+
+[ \t\r\n]+                  /* ignorar espacios */
+
+<<EOF>>                     return 'EOF';
+
+.                           return 'INVALIDO';
 
 /lex
 
-%start expressions
+%left MAS MENOS
+%left POR DIV
+
+%start START
 
 %%
 
-expressions
-    : e EOF         { return $1; }
+START
+    : INSTRUCCIONES EOF
+        {
+            return $1;
+        }
 ;
 
-e : e '+' e         { $$ = $1 + $3; }
-    | e '-' e       { $$ = $1 - $3; }
-    | e '*' e       { $$ = $1 * $3; }
-    | e '/' e       { $$ = $1 / $3; }
-    | '(' e ')'     { $$ = $2; }
-    | NUMBER        { $$ = Number(yytext); }
+INSTRUCCIONES
+    : INSTRUCCIONES INSTRUCCION
+        {
+            $1.push($2);
+            $$ = $1;
+        }
+
+    | INSTRUCCION
+        {
+            $$ = [];
+            $$.push($1);
+        }
 ;
+
+INSTRUCCION
+    : PRINT LPAREN EXPRESION RPAREN (SEMICOLON)?
+        {
+            $$ = new Print(
+                $3,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+;
+
+EXPRESION
+
+    : EXPRESION MAS EXPRESION
+        {
+            $$ = new Suma(
+                $1,
+                $3,
+                OperadoresAritmeticos.SUMA,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | EXPRESION MENOS EXPRESION
+        {
+            $$ = new Resta(
+                $1,
+                $3,
+                OperadoresAritmeticos.RESTA,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | EXPRESION POR EXPRESION
+        {
+            $$ = new Multiplicacion(
+                $1,
+                $3,
+                OperadoresAritmeticos.MULTIPLICACION,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | EXPRESION DIV EXPRESION
+        {
+            $$ = new Division(
+                $1,
+                $3,
+                OperadoresAritmeticos.DIVISION,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | INT
+        {
+            $$ = new Nativo(
+                Number(yytext),
+                new Tipo(tipoDato.ENTERO, true),
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | DECIMAL
+        {
+            $$ = new Nativo(
+                Number(yytext),
+                new Tipo(tipoDato.DECIMAL, true),
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | CADENA
+        {
+            $$ = new Nativo(
+                yytext.substring(1, yytext.length - 1),
+                new Tipo(tipoDato.CADENA, true),
+                @1.first_line,
+                @1.first_column
+            );
+        }
+    | LPAREN EXPRESION RPAREN
+        {
+            $$ = $2;
+        }
+;
+
+%%
