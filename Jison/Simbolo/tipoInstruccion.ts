@@ -2,5 +2,7 @@
 
 export enum tipoInstruccion {
     IF,
-    PRINT
+    PRINT,
+    DECLARACION,
+    BLOQUE
 }
