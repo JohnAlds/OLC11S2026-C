@@ -1,5 +1,6 @@
 import { Simbolo } from "./Simbolo"
 import { Errores } from "../Excepciones/Errores"
+import { Node } from "../Abstract/Node"
 
 export class TablaSimbolos {
 
@@ -38,6 +39,26 @@ export class TablaSimbolos {
                 return simbolo
             }
 
+            tablaActual = tablaActual.anterior
+        }
+
+        return null
+    }
+
+    getValueasNode(id: string): Node | null {
+
+        let tablaActual: TablaSimbolos | undefined = this
+        //console.log(tablaActual.tabla);
+
+        while (tablaActual != undefined) {
+
+            const simbolo = tablaActual.tabla.get(id)
+
+            if (simbolo != undefined) {
+                let node = new Node(id);
+                node.pushChild(new Node(simbolo.valor.toString()));
+                return node;
+            }
             tablaActual = tablaActual.anterior
         }
 

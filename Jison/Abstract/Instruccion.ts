@@ -1,6 +1,7 @@
 import { Arbol } from "../Simbolo/Arbol";
 import { Tipo } from "../Simbolo/Tipo";
 import { TablaSimbolos } from "../Simbolo/TablaSimbolos";
+import { Node } from "./Node";
 export abstract class Instruccion {
 
     tipo: Tipo;
@@ -14,5 +15,5 @@ export abstract class Instruccion {
     }
 
     abstract interpretar(arbol: Arbol, tabla: TablaSimbolos): any;
-
+    public abstract ast(arbol?: Arbol, tabla?: TablaSimbolos): Node;
 }

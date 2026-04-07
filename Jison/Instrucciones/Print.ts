@@ -5,6 +5,7 @@ import { Errores } from "../Excepciones/Errores"
 import { Tipo } from "../Simbolo/Tipo"
 import { tipoDato } from "../Simbolo/tipoDato"
 import { tipoInstruccion } from "../Simbolo/tipoInstruccion"
+import { Node } from "../Abstract/Node"
 
 export class Print extends Instruccion {
 
@@ -28,6 +29,11 @@ export class Print extends Instruccion {
         return null
     }
 
+    public ast(arbol: Arbol, tabla: TablaSimbolos): Node {
+        let node = new Node("PRINT");
+        node.pushChild(this.expresion.ast(arbol, tabla));
+        return node;
+    }
     
 
 }

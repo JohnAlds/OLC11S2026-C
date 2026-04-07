@@ -2,6 +2,7 @@ import { Instruccion } from "../Abstract/Instruccion"
 import { Arbol } from "../Simbolo/Arbol"
 import { TablaSimbolos } from "../Simbolo/TablaSimbolos"
 import { Tipo } from "../Simbolo/Tipo"
+import { Node } from "../Abstract/Node"
 
 export class Nativo extends Instruccion {
 
@@ -16,4 +17,9 @@ export class Nativo extends Instruccion {
         return this.valor
     }
 
+    public ast(): Node{
+        let node = new Node("NATIVO");
+        node.pushChild(new Node(this.valor.toString()));
+        return node;
+    }
 }

@@ -5,6 +5,7 @@ import { Tipo } from "../Simbolo/Tipo"
 import { Errores } from "../Excepciones/Errores"
 import { tipoDato } from "../Simbolo/tipoDato"
 import { OperadoresAritmeticos } from "./OperadoresAritmeticos"
+import { Node } from "../Abstract/Node"
 
 export class Suma extends Instruccion {
 
@@ -109,6 +110,12 @@ export class Suma extends Instruccion {
         }
     }
 
-    
+    public ast(arbol: Arbol, tabla: TablaSimbolos): Node {
+        let node = new Node("SUMA");
+        node.pushChild(new Node(this.operando1.interpretar(arbol, tabla).toString()));
+        node.pushChild(new Node("+"));
+        node.pushChild(new Node(this.operando2.interpretar(arbol, tabla).toString()));
+        return node;
+    }
 
 }

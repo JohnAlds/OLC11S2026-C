@@ -4,6 +4,8 @@ import { Simbolo } from "../Simbolo/Simbolo";
 import { Tipo } from "../Simbolo/Tipo";
 import { Errores } from "../Excepciones/Errores";
 import { tipoInstruccion } from "../Simbolo/tipoInstruccion";
+import { Node } from "../Abstract/Node";
+import { tipoDato } from "../Simbolo/tipoDato";
 
 export class Declaracion extends Instruccion {
 
@@ -37,5 +39,13 @@ export class Declaracion extends Instruccion {
 
         tabla.setVariable(simbolo);
         return null;
+    }
+
+    public ast(arbol: any, tabla: TablaSimbolos): Node {
+        let node = new Node("DECLARACION");
+        node.pushChild(new Node(tipoDato[this.tipoDeclarado].toString()));
+        node.pushChild(new Node(this.id));
+        node.pushChild(this.valor.ast(arbol, tabla));
+        return node;
     }
 }

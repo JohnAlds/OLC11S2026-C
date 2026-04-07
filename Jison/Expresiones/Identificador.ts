@@ -3,6 +3,7 @@ import { TablaSimbolos } from "../Simbolo/TablaSimbolos";
 import { Errores } from "../Excepciones/Errores";
 import { Tipo } from "../Simbolo/Tipo";
 import { tipoDato } from "../Simbolo/tipoDato";
+import { Node } from "../Abstract/Node";
 
 export class Identificador extends Instruccion {
 
@@ -28,5 +29,18 @@ export class Identificador extends Instruccion {
 
         this.tipo = simbolo.tipo;
         return simbolo.valor;
+    }
+
+    public ast(arbol: any, tabla: TablaSimbolos): Node {
+        let node = new Node("IDENTIFICADOR");
+        let simbolo = tabla.getVariable(this.id);
+        if (simbolo) {
+            node.pushChild(new Node(this.id));
+            node.pushChild(new Node(simbolo.valor.toString()));
+        } else {
+            node.pushChild(new Node(this.id));
+            node.pushChild(new Node("null"));
+        }
+        return node;
     }
 }
