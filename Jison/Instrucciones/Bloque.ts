@@ -4,6 +4,7 @@ import { Tipo } from "../Simbolo/Tipo";
 import { tipoInstruccion } from "../Simbolo/tipoInstruccion";
 import { Errores } from "../Excepciones/Errores";
 import { Node } from "../Abstract/Node";
+import { Continue } from "./Continue";
 
 export class Bloque extends Instruccion {
     private instrucciones: Instruccion[];
@@ -13,15 +14,15 @@ export class Bloque extends Instruccion {
         this.instrucciones = instrucciones;
     }
 
-    interpretar(arbol: any, tabla: TablaSimbolos) {
-        this.entornoLocal = new TablaSimbolos(tabla);
+    interpretar(arbol: any, tabla: TablaSimbolos): any {
+        const nuevaTabla = new TablaSimbolos(tabla);
 
         for (const instruccion of this.instrucciones) {
-            const resultado = instruccion.interpretar(arbol, this.entornoLocal);
+            const resultado = instruccion.interpretar(arbol, nuevaTabla);
 
-            if (resultado instanceof Errores) {
-                return resultado;
-            }
+            if (resultado instanceof Errores) return resultado;
+            if (resultado instanceof Continue) return resultado;
+          
         }
 
         return null;

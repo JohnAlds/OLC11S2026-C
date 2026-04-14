@@ -1,8 +1,12 @@
 
 
 export enum tipoInstruccion {
-    IF,
     PRINT,
     DECLARACION,
-    BLOQUE
+    ASIGNACION,
+    BLOQUE,
+    FOR,
+    CONTINUE,
+    IF,
+    ELSE
 }

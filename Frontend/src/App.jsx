@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function App() {
   const [codigo, setCodigo] = useState(
-    'int a = 30+50;  string msg = "Hola Mundo!!"; { int a = 20; print(a); } print(msg);'
+    ''
   );
   const [salida, setSalida] = useState("");
   const [errores, setErrores] = useState([]);
