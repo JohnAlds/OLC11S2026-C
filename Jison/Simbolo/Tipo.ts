@@ -5,13 +5,15 @@ export class Tipo {
 
     private _tipo?: tipoInstruccion
     private _dato?: tipoDato
+    private _dimensiones: number
 
-    constructor(valor: tipoInstruccion | tipoDato, esDato: boolean = true) {
+    constructor(valor: tipoInstruccion | tipoDato, esDato: boolean = true, dimensiones: number = 0) {
         if (esDato) {
             this._dato = valor as tipoDato
         } else {
             this._tipo = valor as tipoInstruccion
         }
+        this._dimensiones = dimensiones
     }
 
     get tipo(): tipoInstruccion | undefined {
@@ -30,4 +32,11 @@ export class Tipo {
         this._dato = valor
     }
 
+    get dimensiones(): number {
+        return this._dimensiones
+    }
+
+    set dimensiones(valor: number) {
+        this._dimensiones = valor
+    }
 }

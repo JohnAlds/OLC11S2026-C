@@ -8,5 +8,8 @@ export enum tipoInstruccion {
     FOR,
     CONTINUE,
     IF,
-    ELSE
+    ELSE,
+    DECLARACION_MATRIZ,
+    MATRIZ_LITERAL,
+    ACCESO_MATRIZ
 }

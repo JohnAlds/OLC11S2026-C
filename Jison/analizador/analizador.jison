@@ -7,6 +7,8 @@ const For = require("../Instrucciones/For").For;
 const Asignacion = require("../Instrucciones/Asignacion").Asignacion;
 const Continue = require("../Instrucciones/Continue").Continue;
 const If = require("../Instrucciones/If").If;
+const DeclaracionMatriz = require("../Instrucciones/DeclaracionMatriz").DeclaracionMatriz;
+
 
 
 
@@ -23,6 +25,8 @@ const MenorIgual = require("../Expresiones/MenorIgual").MenorIgual;
 const MayorIgual = require("../Expresiones/MayorIgual").MayorIgual;
 const Igual = require("../Expresiones/Igual").Igual;
 const Distinto = require("../Expresiones/Distinto").Distinto;
+const MatrizLiteral = require("../Expresiones/MatrizLiteral").MatrizLiteral;
+const AccesoMatriz = require("../Expresiones/AccesoMatriz").AccesoMatriz;
 
 
 // Importaciones terceras
@@ -61,6 +65,9 @@ const OperadoresRelacionales = require("../Expresiones/OperadoresRelacionales").
 ")"                         return 'RPAREN';
 ";"                         return 'SEMICOLON';
 "="                         return 'IGUAL';
+"["                         return 'LBRACKET';
+"]"                         return 'RBRACKET';
+","                         return 'COMA';
 
 "+"                         return 'MAS';
 "-"                         return 'MENOS';
@@ -228,6 +235,26 @@ INSTRUCCION
                 @1.first_column
             );
         }
+    | TIPO DIMENSIONES ID IGUAL MATRIZ_LITERAL SEMICOLON
+        {
+            $$ = new DeclaracionMatriz(
+                new Tipo($1, true, $2),
+                $3,
+                $5,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+    | TIPO DIMENSIONES ID SEMICOLON
+        {
+            $$ = new DeclaracionMatriz(
+                new Tipo($1, true, $2),
+                $3,
+                null,
+                @1.first_line,
+                @1.first_column
+            );
+        }
 ;
 
 
@@ -387,15 +414,93 @@ EXPRESION
         {
             $$ = $2;
         }
-        
+    | ID ACCESOS_MATRIZ
+        {
+            $$ = new AccesoMatriz(
+                $1,
+                $2,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+
+    | MATRIZ_LITERAL
+        {
+            $$ = $1;
+        }
     | ID
     {
         $$ = new Identificador(
-            yytext,
+            $1,
             @1.first_line,
             @1.first_column
         );
     }
+;
+
+DIMENSIONES
+    : DIMENSIONES LBRACKET RBRACKET
+        {
+            $$ = $1 + 1;
+        }
+    | LBRACKET RBRACKET
+        {
+            $$ = 1;
+        }
+;
+
+ACCESOS_MATRIZ
+    : ACCESOS_MATRIZ LBRACKET EXPRESION RBRACKET 
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    | LBRACKET EXPRESION RBRACKET
+        {
+            $$ = [$2];
+        }
+;
+
+MATRIZ_LITERAL
+    : LBRACKET FILAS_MATRIZ RBRACKET
+        {
+            $$ = new MatrizLiteral(
+                $2,
+                @1.first_line,
+                @1.first_column
+            );
+        }
+;
+
+FILAS_MATRIZ
+    : FILAS_MATRIZ COMA FILA_MATRIZ
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    | FILA_MATRIZ
+        {
+            $$ = [$1];
+        }
+;
+
+FILA_MATRIZ
+    : LBRACKET LISTA_EXPRESIONES RBRACKET
+        {
+            $$ = $2;
+        }
+;
+
+LISTA_EXPRESIONES
+    : LISTA_EXPRESIONES COMA EXPRESION 
+        {
+            $1.push($3);
+            $$ = $1;
+        }
+    | EXPRESION
+        {
+            $$ = [$1];
+        }
 ;
 
 TIPO
